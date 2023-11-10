@@ -47,8 +47,12 @@ const viewCart = async (req, res) => {
     );
 
     if (!userCart) {
-      return res.json({ items: [] }); //Empty cart
+      return res.send({ items: [] }); //Empty cart
     }
+    res.status(200).send({
+      success: true,
+      userCart,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).send({
@@ -59,4 +63,70 @@ const viewCart = async (req, res) => {
   }
 };
 
-export { addToCart };
+// update the quantity of a product
+const updateQuantity = async (req, res) => {
+  try {
+    const { cartItemId, quantity } = req.body;
+    const { userId } = req.user;
+    // making sure the owner is making the request
+    const updateCart = await Cart.findOneAndUpdate(
+      {
+        "items._id": cartItemId,
+        users: userId,
+      },
+      { $set: { "items.$.quantity": quantity } }
+    );
+
+    if (!updateCart) {
+      res.status(403).send({
+        success: false,
+        message: "You are not authorized to update the cart ",
+      });
+
+      res.status(200).send({
+        success: true,
+        message: "Cart item updated Successfully",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Unable to update the cart",
+      error,
+    });
+  }
+};
+
+const removeFromCart = async (req, res) => {
+  try {
+    const { cartItemId } = req.params;
+    const { userId } = req.user;
+
+    // Making sure that user is making the request to remove the item
+    const removeCart = await Cart.findByIdAndUpdate(
+      { "items._id": cartItemId, user: userId },
+      { $pull: { items: { _id: cartItemId } } }
+    );
+    if (!removeCart) {
+      return res.status(403).send({
+        success: false,
+        message: "You are not authorized to perform this functionality",
+      });
+    }
+    res.status(200).send({
+      success: true,
+      message: "Product removed from the cart ",
+      removeCart,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Unable to remove the product from the cart",
+      error,
+    });
+  }
+};
+
+export { addToCart, viewCart, updateQuantity, removeFromCart };

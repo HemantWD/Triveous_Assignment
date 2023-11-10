@@ -6,6 +6,7 @@ import morgan from "morgan";
 import cors from "cors";
 import productRoutes from "./routes/productRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
+import categoryRoutes from "./routes/categoryRoutes.js";
 
 // config env
 dotenv.config();
@@ -22,6 +23,7 @@ app.use(morgan("dev"));
 
 // routes
 app.use("/api/auth", authRoutes);
+app.use("/api/category", categoryRoutes);
 app.use("/api/product", productRoutes);
 app.use("/api/cart", cartRoutes);
 
