@@ -4,6 +4,8 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import morgan from "morgan";
 import cors from "cors";
+import productRoutes from "./routes/productRoutes.js";
+import cartRoutes from "./routes/cartRoutes.js";
 
 // config env
 dotenv.config();
@@ -20,13 +22,15 @@ app.use(morgan("dev"));
 
 // routes
 app.use("/api/auth", authRoutes);
+app.use("/api/product", productRoutes);
+app.use("/api/cart", cartRoutes);
 
 // REST
 app.get("/", (req, res) => {
   res.send("<h1>Server is Up and Running</h1>");
 });
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server is running on ${PORT}`);
 });
