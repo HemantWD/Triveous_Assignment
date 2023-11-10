@@ -22,11 +22,11 @@
   ## GET
   The GET method is a HTTP method that is applied while requesting information from a particular source.
 
-  **Get api to reterive the list of categories.**
+  **<h2>Get api to reterive the list of categories.</h2>**
   
   **Request Method**: `GET`
 
-  **URL Reuired** : `http://localhost:8080/api/product/category`
+  **URL Reuired** : `http://localhost:8080/api/category/list`
 
   **Schema**
   ````json
@@ -38,7 +38,9 @@
   ### Success Response
 
   **Code** : `200 OK`
+  
   **Content Example**
+  
   ````json
   [
     {
@@ -49,8 +51,79 @@
   ]
   ````
   **Error Response**
-  **Code**:`
   
+  **Code**:`500`
+
+  **Content Example**
+
+  ````json
+  {
+    "error" : "Not able to fetch the categories"
+  }
+  ````
+
+  **<h2>GET api to reterive a list of products based on categoryID</h2>**
+  
+   **Request Method**: `GET`
+
+  **URL Reuired** : `http://localhost:8080/api/product/category`
+
+  **Schema**
+  ````json
+  [
+    "title": {
+      "type": "String",
+      "required": "true",
+    },
+    "price": {
+      "type": "String",
+      "required": "true",
+    },
+    "description": {
+      "type": "String",
+      "required": "true",
+    },
+    "availability": {
+      "type": "Boolean",
+      "default": "true",
+    },
+    "category": {
+      "type": "mongoose.Schema.Types.ObjectId",
+      "ref": "category",
+    },
+  ]
+  ````
+
+  ### Success Response
+
+  **Code** : `200 OK`
+  
+  **Content Example**
+  
+  ````json
+  [
+    {
+        "_id": "654d8ba139e58f8f856c5c8a",
+        "title": "Smartphone",
+        "price": "15000",
+        "description": "Flag-ship Phone",
+        "availability": true,
+        "category": "654d8b9e39e58f8f856c5c84",
+        "__v": 0
+    }
+  ]
+  ````
+  **Error Response**
+  
+  **Code**:`500`
+
+  **Content Example**
+
+  ````json
+  {
+    "error" : "Unable to reterive Products"
+  }
+  ````
   
 
 
